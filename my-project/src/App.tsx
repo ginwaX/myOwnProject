@@ -1,58 +1,85 @@
-
-import './App.css'
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [character, setCharacter] = useState(null);
+  const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchCharacter();
-  }, []);
+  const API_KEY = ''; // API key here
+  const BASE_URL = 'https://api.rawg.io/api/games';
 
-  const fetchCharacter = async () => {
+  const fetchRandomGame = async () => {
     setLoading(true);
-    const randomId = Math.floor(Math.random() * 826) + 1;
-    const response = await fetch(`https://rickandmortyapi.com/api/character/${randomId}`);
-    const data = await response.json();
-    setCharacter(data);
-    setLoading(false);
+    try {
+      const countResponse = await fetch(`${BASE_URL}?key=${API_KEY}`);
+      const countData = await countResponse.json();
+      const totalGames = countData.count;
+      
+      const randomPage = Math.floor(Math.random() * (totalGames / 20)) + 1;
+      
+      const response = await fetch(`${BASE_URL}?key=${API_KEY}&page=${randomPage}&page_size=20`);
+      const data = await response.json();
+      
+      const randomIndex = Math.floor(Math.random() * data.results.length);
+      setGame(data.results[randomIndex]);
+    } catch (error) {
+      console.error('Error fetching game:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    fetchRandomGame();
+  }, []);
+
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h1>Rick and Morty Character</h1>
-      // I found some way to make the loading thing
-      {loading ? (
-        <p>Loading...</p>
-      ) : character ? (
-        <div style={{ margin: '20px auto', maxWidth: '500px' }}>
-          <img 
-            src={character.image} 
-            alt={character.name}
-            style={{ width: '200px', borderRadius: '8px' }}
-          />
-          <h2>{character.name}</h2>
-          <p><b>Status:</b> {character.status}</p>
-          <p><b>Species:</b> {character.species}</p>
-          <p><b>Location:</b> {character.location.name}</p>
-        </div>
-      ) : null}
-      
-      <button 
-        onClick={fetchCharacter}
-        style={{
-          padding: '10px 20px',
-          backgroundColor: '#24282f',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-        }}
-      >
-        Get New Character
-      </button>
+    <div className="App">
+      <header>
+        <h1>Random Game Generator</h1>
+        <button onClick={fetchRandomGame} disabled={loading}>
+          {loading ? 'Loading...' : 'Get Random Game'}
+        </button>
+      </header>
+
+      <main>
+        {loading ? (
+          <div className="loading">Loading game...</div>
+        ) : game ? (
+          <div className="game-card">
+            <img 
+              src={game.background_image} 
+              alt={game.name}
+              className="game-image"
+            />
+            <div className="game-info">
+              <h2>{game.name}</h2>
+              <p className="release-date">
+                Released: {new Date(game.released).toLocaleDateString()}
+              </p>
+              <p className="rating">Rating: {game.rating}/5</p>
+              <div className="genres">
+                {game.genres.map(genre => (
+                  <span key={genre.id} className="genre-tag">
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
+              <p className="description">{game.description_raw?.substring(0, 200)}...</p>
+              <a 
+                href={game.website || `https://rawg.io/games/${game.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="more-info"
+              >
+                More Info →
+              </a>
+            </div>
+          </div>
+        ) : (
+          <p>Failed to load game. Try again.</p>
+        )}
+      </main>
     </div>
   );
 }
