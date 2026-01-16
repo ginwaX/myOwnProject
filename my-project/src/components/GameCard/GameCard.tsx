@@ -1,4 +1,3 @@
-// GameCard.tsx
 import React from 'react';
 //import './GameCard.css';
 
