@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import GameCard from './components/GameCard/GameCard';
 
 function App() {
   const [game, setGame] = useState(null);
@@ -46,36 +47,7 @@ function App() {
         {loading ? (
           <div className="loading">Loading game...</div>
         ) : game ? (
-          <div className="game-card">
-            <img 
-              src={game.background_image} 
-              alt={game.name}
-              className="game-image"
-            />
-            <div className="game-info">
-              <h2>{game.name}</h2>
-              <p className="release-date">
-                Released: {new Date(game.released).toLocaleDateString()}
-              </p>
-              <p className="rating">Rating: {game.rating}/5</p>
-              <div className="genres">
-                {game.genres.map(genre => (
-                  <span key={genre.id} className="genre-tag">
-                    {genre.name}
-                  </span>
-                ))}
-              </div>
-              <p className="description">{game.description_raw?.substring(0, 200)}...</p>
-              <a 
-                href={game.website || `https://rawg.io/games/${game.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="more-info"
-              >
-                More Info →
-              </a>
-            </div>
-          </div>
+          <GameCard game={game} />
         ) : (
           <p>Failed to load game. Try again.</p>
         )}
