@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import GameCard from './components/GameCard/GameCard';
+import Header from './components/Header/Header';
 
 function App() {
   const [games, setGames] = useState([]);
@@ -9,7 +10,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  const API_KEY = '';
+  const API_KEY = '92b0ae78f36a479da3a5a58d8d3455bc';
   const BASE_URL = 'https://api.rawg.io/api/games';
 
   const fetchRandomGames = async () => {
@@ -87,37 +88,14 @@ function App() {
 
   return (
     <div className="App">
-      <header className="app-header">
-        <div className="header-content">
-          <div className="search-container">
-            <form onSubmit={searchGames} className="search-form">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for games..."
-                className="search-input"
-                disabled={loading}
-              />
-              <button 
-                type="submit" 
-                className="search-button"
-                disabled={loading}
-              >
-                🔍
-              </button>
-            </form>
-          </div>
-          
-          <button 
-            onClick={fetchRandomGames} 
-            disabled={loading}
-            className="refresh-button"
-          >
-            {loading ? 'Loading...' : 'Random Games'}
-          </button>
-        </div>
-      </header>
+      <Header
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        loading={loading}
+        isSearching={isSearching}
+        onSearch={searchGames}
+        onRefresh={fetchRandomGames}
+      />
 
       <main className="main-content">
         {loading ? (

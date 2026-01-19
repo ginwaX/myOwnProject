@@ -24,6 +24,7 @@ body {
   padding: 30px 20px;
   text-align: center;
   border-bottom: 2px solid #ddd;
+  flex-shrink: 0
 }
 
 h1 {
@@ -59,6 +60,110 @@ h1 {
   opacity: 0.7;
 }
 
+.app-header {
+  background-color: #e8f5e9; 
+  padding: 20px 40px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  margin: 0 auto;
+}
+
+.search-container {
+  flex: 1;
+  max-width: 500px;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  font-size: 16px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px #4CAF50;
+}
+
+.search-input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.search-button {
+  width: 60px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.search-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.refresh-button {
+  height: 48px;
+  padding: 0 24px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.refresh-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.refresh-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .main-content {
   flex: 1;
   width: 100%;
@@ -73,7 +178,7 @@ h1 {
   gap: 25px;
   width: 100%;
   height: 100%;
-  max-width: 1400px;
+  padding: 0 40px;
   margin: 0 auto;
 }
 
@@ -256,10 +361,6 @@ h1 {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, auto);
     max-width: 500px;
-  }
-  
-  .app-header {
-    padding: 25px 15px;
   }
   
   h1 {
