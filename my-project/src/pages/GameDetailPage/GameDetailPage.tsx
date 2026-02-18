@@ -18,7 +18,7 @@ const GameDetailPage = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
-  const API_KEY = '92b0ae78f36a479da3a5a58d8d3455bc';
+  const API_KEY = '';
 
   useEffect(() => {
     const abortController = new AbortController();
