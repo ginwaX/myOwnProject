@@ -1,59 +1,116 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
+import './Header.css';
 
-interface HeaderProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  loading: boolean;
-  isSearching: boolean;
-  onSearch: (e: React.FormEvent) => void;
-  onRefresh: () => void;
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = React.useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
 }
 
-class Header extends Component<HeaderProps> {
-  render() {
-    const { 
-      searchQuery, 
-      setSearchQuery, 
-      loading, 
-      isSearching, 
-      onSearch, 
-      onRefresh 
-    } = this.props;
+function Header({ 
+  searchQuery, 
+  setSearchQuery,
+  loading, 
+  isSearching, 
+  onSearch, 
+  onRefresh,
+  suggestions,
+  showSuggestions,
+  onSuggestionClick,
+  onSearchInput
+}) {
+  const isFirstRender = useRef(true);
+  const debouncedSearchTerm = useDebounce(searchQuery, 500);
 
-    return (
-      <header className="app-header">
-        <div className="header-content">
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (debouncedSearchTerm.trim()) {
+      onSearchInput(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm, onSearchInput]);
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      onSearchInput(searchQuery);
+    }
+  };
+
+  return (
+    <header className="header-section">
+      <div className="header-content">
+        <h1 className="app-title">🎮 GameFinder</h1>
+        <p className="app-subtitle">Discover your next favorite game</p>
+        
+        <div className="search-wrapper">
           <div className="search-container">
-            <form onSubmit={onSearch} className="search-form">
+            <form className="search-form" onSubmit={handleSubmit}>
               <input
                 type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for games..."
                 className="search-input"
+                placeholder="Search for games..."
+                value={searchQuery}
+                onChange={handleInputChange}
                 disabled={loading}
               />
-              <button 
-                type="submit" 
-                className="search-button"
-                disabled={loading}
-              >
-                🔍
-              </button>
+              
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="suggestions-container">
+                  {suggestions.map(game => (
+                    <div
+                      key={game.id}
+                      onClick={() => onSuggestionClick(game.name, game.id)} 
+                      className="suggestion-item"
+                    >
+                      {game.background_image && (
+                        <img 
+                          src={game.background_image} 
+                          alt=""
+                          className="suggestion-image"
+                        />
+                      )}
+                      <div className="suggestion-info">
+                        <div className="suggestion-name">{game.name}</div>
+                        <div className="suggestion-year">
+                          {game.released ? game.released.split('-')[0] : 'TBA'}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </form>
+            
+            <button 
+              className="refresh-button"
+              onClick={onRefresh}
+              disabled={loading}
+            >
+              {isSearching ? '🎲 Show Random Games' : '🎲 Random Games'}
+            </button>
           </div>
-          
-          <button 
-            onClick={onRefresh} 
-            disabled={loading}
-            className="refresh-button"
-          >
-            {loading ? 'Loading...' : isSearching ? 'Back to Random' : 'Random Games'}
-          </button>
         </div>
-      </header>
-    );
-  }
+      </div>
+    </header>
+  );
 }
 
 export default Header;

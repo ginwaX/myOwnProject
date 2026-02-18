@@ -54,14 +54,6 @@ class GameCard extends Component<GameCardProps> {
               ? `${game.description_raw.substring(0, 200)}...`
               : 'No description available.'}
           </p>
-          <a 
-            href={game.website || `https://rawg.io/games/${game.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="more-info"
-          >
-            More Info →
-          </a>
         </div>
       </div>
     );
