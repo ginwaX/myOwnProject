@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -8,62 +8,20 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import Download from "yet-another-react-lightbox/plugins/download";
 import './GameDetailPage.css';
+import useGameDetails from '../../shared/hooks/GamePageHooks';
 
 const GameDetailPage = () => {
-  const { gameId } = useParams();
   const navigate = useNavigate();
-  const [game, setGame] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [screenshots, setScreenshots] = useState([]);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [photoIndex, setPhotoIndex] = useState(0);
-
-  const API_KEY = '';
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    
-    const fetchGameDetails = async () => {
-      setLoading(true);
-      try {
-        const gameResponse = await fetch(
-          `https://api.rawg.io/api/games/${gameId}?key=${API_KEY}`,
-          { signal: abortController.signal }
-        );
-        const gameData = await gameResponse.json();
-        setGame(gameData);
-
-        const screenshotsResponse = await fetch(
-          `https://api.rawg.io/api/games/${gameId}/screenshots?key=${API_KEY}`,
-          { signal: abortController.signal }
-        );
-        const screenshotsData = await screenshotsResponse.json();
-        setScreenshots(screenshotsData.results || []);
-      } catch (error) {
-        if (error.name === 'AbortError') {
-          console.log('Fetch aborted - this is normal with Strict Mode');
-        } else {
-          console.error('Error fetching game details:', error);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGameDetails();
-
-    return () => {
-      abortController.abort();
-    };
-  }, [gameId]);
-
-  const slides = screenshots.map(screenshot => ({
-    src: screenshot.image,
-    alt: `${game?.name} screenshot`,
-    title: `${game?.name} - Screenshot`,
-    description: `Screenshot from ${game?.name}`,
-    downloadUrl: screenshot.image, // For download plugin
-  }));
+  const {
+    game,
+    loading,
+    screenshots,
+    lightboxOpen,
+    photoIndex,
+    slides,
+    openLightbox,
+    closeLightbox
+  } = useGameDetails();
 
   if (loading) {
     return (
@@ -129,10 +87,7 @@ const GameDetailPage = () => {
                     src={screenshot.image}
                     alt={`${game.name} screenshot`}
                     className="screenshot"
-                    onClick={() => {
-                      setPhotoIndex(index);
-                      setLightboxOpen(true);
-                    }}
+                    onClick={() => openLightbox(index)}
                     style={{ cursor: 'pointer' }}
                   />
                 ))}
@@ -228,7 +183,7 @@ const GameDetailPage = () => {
 
       <Lightbox
         open={lightboxOpen}
-        close={() => setLightboxOpen(false)}
+        close={closeLightbox}
         slides={slides}
         index={photoIndex}
         plugins={[Zoom, Fullscreen, Thumbnails, Download]}

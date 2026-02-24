@@ -1,0 +1,42 @@
+.game-screenshots {
+  margin-top: 40px;
+}
+
+.game-screenshots h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.screenshots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.screenshot-thumbnail {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.screenshot-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.more-screenshots {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .screenshots-grid {
+    grid-template-columns: 1fr;
+  }
+}
