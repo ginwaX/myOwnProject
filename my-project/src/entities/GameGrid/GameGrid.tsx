@@ -1,15 +1,15 @@
 import React from 'react';
 import GameCard from '../../shared/GameCard/GameCard';
+import './GameGrid.css';
 
 const GameGrid = ({ 
   games, 
   loading, 
   isSearching, 
-  initialLoad, 
   onGameClick,
   onRefresh 
 }) => {
-  if (loading && !initialLoad) {
+  if (loading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
@@ -18,7 +18,7 @@ const GameGrid = ({
     );
   }
 
-  if (!loading && !initialLoad && games.length === 0) {
+  if (!loading && games.length === 0) {
     return (
       <div className="error-message">
         <p>No games found. Please try again.</p>
@@ -28,31 +28,17 @@ const GameGrid = ({
   }
 
   return (
-    <div className={`games-grid ${loading && !initialLoad ? 'loading-hidden' : ''}`}>
-      {games.length > 0 ? (
-        games.map(game => (
-          <div key={game.id} className="game-card-wrapper">
-            <div 
-              className="clickable-game-card"
-              onClick={() => onGameClick(game.id)}
-            >
-              <GameCard game={game} />
-            </div>
+    <div className="games-grid">
+      {games.map(game => (
+        <div key={game.id} className="game-card-wrapper">
+          <div 
+            className="clickable-game-card"
+            onClick={() => onGameClick(game.id)}
+          >
+            <GameCard game={game} />
           </div>
-        ))
-      ) : (
-        initialLoad && Array(6).fill(null).map((_, index) => (
-          <div key={`placeholder-${index}`} className="game-card-wrapper">
-            <div className="clickable-game-card placeholder-card">
-              <div className="game-card">
-                <div className="placeholder-image"></div>
-                <div className="placeholder-title"></div>
-                <div className="placeholder-text"></div>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
+        </div>
+      ))}
     </div>
   );
 };

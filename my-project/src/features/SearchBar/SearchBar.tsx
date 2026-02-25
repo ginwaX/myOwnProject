@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import './SearchBar.css';
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = React.useState(value);

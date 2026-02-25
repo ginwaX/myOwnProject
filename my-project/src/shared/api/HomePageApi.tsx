@@ -1,4 +1,4 @@
-const API_KEY = '92b0ae78f36a479da3a5a58d8d3455bc';
+const API_KEY = '';
 const BASE_URL = 'https://api.rawg.io/api/games';
 
 let requestCounter = 0;

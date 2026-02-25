@@ -10,7 +10,7 @@ const useGameDetails = () => {
   const [photoIndex, setPhotoIndex] = useState(0);
 
   const hasMountedRef = useRef(false);
-  const API_KEY = '92b0ae78f36a479da3a5a58d8d3455bc';
+  const API_KEY = '';
 
   useEffect(() => {
     if (!hasMountedRef.current) {

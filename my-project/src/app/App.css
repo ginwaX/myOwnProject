@@ -50,238 +50,6 @@ body {
   height: 100%;
 }
 
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding: 1rem 0 3rem;
-  width: 100%;
-  min-height: 600px;
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.2s ease;
-}
-
-.games-grid:empty,
-.games-grid:has(.placeholder-card),
-.games-grid.loading-hidden:has(.placeholder-card) {
-  display: grid !important;
-  width: 100% !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-.games-grid.loading-hidden {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.games-grid:not(.loading-hidden) {
-  visibility: visible;
-  opacity: 1;
-}
-
-@supports not selector(:has(*)) {
-  .games-grid:empty,
-  .games-grid.loading-hidden {
-    display: grid !important;
-    width: 100% !important;
-  }
-}
-
-.game-card-wrapper {
-  height: 100%;
-  min-height: 280px;
-  width: 100%;
-}
-
-.clickable-game-card {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.clickable-game-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.clickable-game-card .game-card {
-  background: transparent !important;
-  border: none !important;
-  padding: 1.5rem !important;
-  height: 100% !important;
-  width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.clickable-game-card .game-card img {
-  height: 200px !important;
-  width: 100% !important;
-  object-fit: cover !important;
-  border-radius: 10px !important;
-  margin-bottom: 1rem !important;
-}
-
-.clickable-game-card .game-card h3 {
-  font-size: 1.25rem !important;
-  margin-bottom: 0.75rem !important;
-  color: white !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-}
-
-.clickable-game-card .game-card p {
-  font-size: 0.95rem !important;
-  color: rgba(255, 255, 255, 0.9) !important;
-  margin-bottom: 0.5rem !important;
-  flex-grow: 1 !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 3 !important;
-  -webkit-box-orient: vertical !important;
-}
-
-.placeholder-card {
-  background: rgba(255, 255, 255, 0.05) !important;
-  animation: pulse 1.5s ease-in-out infinite;
-  cursor: default !important;
-  display: flex !important;
-}
-
-.placeholder-card:hover {
-  transform: none !important;
-  box-shadow: none !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
-}
-
-.placeholder-image {
-  width: 100%;
-  height: 200px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  margin-bottom: 1rem;
-}
-
-.placeholder-title {
-  width: 80%;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  margin-bottom: 0.75rem;
-}
-
-.placeholder-text {
-  width: 100%;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
-
-.loading-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-height: 600px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  color: white;
-  z-index: 10;
-}
-
-.loading-spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.error-message {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-height: 600px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  color: white;
-  text-align: center;
-  z-index: 10;
-}
-
-.error-message p {
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
-  opacity: 0.9;
-}
-
-.error-message button {
-  padding: 1rem 2.5rem;
-  background: white;
-  color: #667eea;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.error-message button:hover {
-  background: #f0f0f0;
-  transform: translateY(-2px);
-}
-
 .position-relative {
   position: relative;
   z-index: 1;
@@ -296,7 +64,7 @@ button,
 button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-  transform: none !important;
+  transform: none;
 }
 
 button:focus-visible,
@@ -309,13 +77,6 @@ button:focus-visible,
 html {
   overflow-x: hidden;
   overflow-y: scroll;
-}
-
-@media (max-width: 1200px) {
-  .games-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.75rem;
-  }
 }
 
 @media (max-width: 992px) {
@@ -333,33 +94,6 @@ html {
   .content-wrapper {
     min-height: 500px;
   }
-  
-  .games-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    min-height: 500px;
-  }
-  
-  .clickable-game-card .game-card img {
-    height: 180px !important;
-  }
-  
-  .placeholder-image {
-    height: 180px;
-  }
-  
-  .placeholder-title {
-    height: 22px;
-  }
-  
-  .placeholder-text {
-    height: 54px;
-  }
-  
-  .loading-container,
-  .error-message {
-    min-height: 500px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -369,41 +103,6 @@ html {
   }
   
   .content-wrapper {
-    min-height: 400px;
-  }
-  
-  .games-grid {
-    gap: 1.25rem;
-    min-height: 400px;
-  }
-  
-  .clickable-game-card .game-card {
-    padding: 1.25rem !important;
-  }
-  
-  .clickable-game-card .game-card img {
-    height: 160px !important;
-  }
-  
-  .placeholder-image {
-    height: 160px;
-  }
-  
-  .placeholder-title {
-    height: 20px;
-    margin-bottom: 0.5rem;
-  }
-  
-  .placeholder-text {
-    height: 48px;
-  }
-  
-  .clickable-game-card .game-card h3 {
-    font-size: 1.1rem !important;
-  }
-  
-  .loading-container,
-  .error-message {
     min-height: 400px;
   }
 }
