@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './RandomGames.module.css';
 
 interface RandomGamesProps {
   onRefresh: () => void;
@@ -9,7 +10,7 @@ interface RandomGamesProps {
 function RandomGames({ onRefresh, loading, isSearching }: RandomGamesProps) {
   return (
     <button 
-      className="refresh-button"
+      className={styles['randomGamesButton']}
       onClick={onRefresh}
       disabled={loading}
     >

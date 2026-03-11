@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import './SearchBar.css';
+import styles from './SearchBar.module.css';
 
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = React.useState(value);
@@ -33,9 +33,7 @@ function SearchBar({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
-        if (showSuggestions) {
-          onSearchInput('');
-        }
+        onSearchInput('__HIDE_SUGGESTIONS__');
       }
     };
 
@@ -43,7 +41,7 @@ function SearchBar({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showSuggestions, onSearchInput]);
+  }, [onSearchInput]);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -53,6 +51,8 @@ function SearchBar({
 
     if (debouncedSearchTerm.trim()) {
       onSearchInput(debouncedSearchTerm);
+    } else {
+      onSearchInput('');
     }
   }, [debouncedSearchTerm, onSearchInput]);
 
@@ -73,49 +73,72 @@ function SearchBar({
     }
   };
 
+  const shouldShowNoResults = () => {
+    if (!searchQuery.trim()) {
+      return true;
+    }
+    if (suggestions.length === 0 && searchQuery.trim().length >= 2) {
+      return true;
+    }
+    return false;
+  };
+
   return (
-    <div className="search-wrapper" ref={searchContainerRef}>
-      <div className="search-container"> 
-        <form className="search-form" onSubmit={handleSubmit}>
-          <div className="search-input-wrapper"> 
+    <div className={styles.searchWrapper} ref={searchContainerRef}>
+      <div className={styles.searchContainer}> 
+        <form className={styles.searchForm} onSubmit={handleSubmit}>
+          <div className={styles.searchInputWrapper}> 
             <input
               type="text"
-              className="search-input"
+              className={styles.searchInput}
               placeholder="Search for games..."
               value={searchQuery}
               onChange={handleInputChange}
               onClick={handleInputClick} 
               disabled={loading}
             />
-            <span className="search-icon">🔍</span> 
+            <span className={styles.searchIcon}>🔍</span> 
           </div>
           
-          {showSuggestions && suggestions.length > 0 && (
-            <div className="suggestions-container">
-              {suggestions.map(game => (
-                <div
-                  key={game.id}
-                  onClick={() => {
-                    onSuggestionClick(game.name, game.id);
-                    onSearchInput('');
-                  }} 
-                  className="suggestion-item"
-                >
-                  {game.background_image && (
-                    <img 
-                      src={game.background_image} 
-                      alt=""
-                      className="suggestion-image"
-                    />
-                  )}
-                  <div className="suggestion-info">
-                    <div className="suggestion-name">{game.name}</div>
-                    <div className="suggestion-year">
-                      {game.released ? game.released.split('-')[0] : 'TBA'}
-                    </div>
-                  </div>
+          {showSuggestions && (
+            <div className={styles.suggestionsContainer}>
+              {shouldShowNoResults() ? (
+                <div className={styles.noResultsMessage}>
+                  <p>🔍 No games found</p>
+                  <span>
+                    {!searchQuery.trim() 
+                      ? "Type something to search for games" 
+                      : "Try searching with different keywords"}
+                  </span>
                 </div>
-              ))}
+              ) : (
+                suggestions.length > 0 ? (
+                  suggestions.map(game => (
+                    <div
+                      key={game.id}
+                      onClick={() => {
+                        onSuggestionClick(game.name, game.id);
+                        onSearchInput('__HIDE_SUGGESTIONS__');
+                      }} 
+                      className={styles.suggestionItem}
+                    >
+                      {game.background_image && (
+                        <img 
+                          src={game.background_image} 
+                          alt=""
+                          className={styles.suggestionImage}
+                        />
+                      )}
+                      <div className={styles.suggestionInfo}>
+                        <div className={styles.suggestionName}>{game.name}</div>
+                        <div className={styles.suggestionYear}>
+                          {game.released ? game.released.split('-')[0] : 'TBA'}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : null
+              )}
             </div>
           )}
         </form>

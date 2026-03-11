@@ -6,7 +6,7 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import Download from "yet-another-react-lightbox/plugins/download";
-import './GameScreenshots.css';
+import styles from './GameScreenshots.module.css'; // Updated import
 
 interface GameScreenshotsProps {
   screenshots: Array<{ id: number; image: string }>;
@@ -30,15 +30,15 @@ const GameScreenshots = ({ screenshots, gameName }: GameScreenshotsProps) => {
   }));
 
   return (
-    <div className="game-screenshots">
+    <div className={styles['game-screenshots']}>
       <h2>Screenshots</h2>
-      <div className="screenshots-grid">
+      <div className={styles['screenshots-grid']}>
         {screenshots.slice(0, 4).map((screenshot, index) => (
           <img
             key={screenshot.id}
             src={screenshot.image}
             alt={`${gameName} screenshot`}
-            className="screenshot-thumbnail"
+            className={styles['screenshot-thumbnail']}
             onClick={() => {
               setPhotoIndex(index);
               setLightboxOpen(true);
@@ -48,7 +48,7 @@ const GameScreenshots = ({ screenshots, gameName }: GameScreenshotsProps) => {
       </div>
       
       {screenshots.length > 4 && (
-        <p className="more-screenshots">
+        <p className={styles['more-screenshots']}>
           +{screenshots.length - 4} more screenshots available
         </p>
       )}

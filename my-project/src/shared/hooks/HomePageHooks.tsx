@@ -42,34 +42,46 @@ const useHomePage = () => {
     setSearchQuery(query);
   }, []);
 
-  const handleSearchInput = useCallback(async (query) => {
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
+const handleSearchInput = useCallback(async (query) => {
+  if (query === '__HIDE_SUGGESTIONS__') {
+    setShowSuggestions(false);
+    setSuggestions([]);
+    return;
+  }
 
-    searchTimeoutRef.current = setTimeout(async () => {
-      const requestId = ++currentRequestRef.current;
+  if (searchTimeoutRef.current) {
+    clearTimeout(searchTimeoutRef.current);
+  }
+
+  if (!query.trim()) {
+    setShowSuggestions(false);
+    setSuggestions([]);
+    return;
+  }
+
+  searchTimeoutRef.current = setTimeout(async () => {
+    const requestId = ++currentRequestRef.current;
+    
+    if (query.length >= 2) {
+      const result = await fetchSuggestionsAPI(query, requestId);
       
-      if (query.length >= 2) {
-        const result = await fetchSuggestionsAPI(query, requestId);
-        
-        if (result.requestId === currentRequestRef.current) {
-          if (result.success && result.suggestions.length > 0) {
-            setSuggestions(result.suggestions);
-            setShowSuggestions(true);
-          } else {
-            setSuggestions([]);
-            setShowSuggestions(false);
-          }
-        }
-      } else {
-        if (requestId === currentRequestRef.current) {
+      if (result.requestId === currentRequestRef.current) {
+        if (result.success) {
+          setSuggestions(result.suggestions);
+          setShowSuggestions(true);
+        } else {
           setSuggestions([]);
           setShowSuggestions(false);
         }
       }
-    }, 300);
-  }, []);
+    } else {
+      if (requestId === currentRequestRef.current) {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+    }
+  }, 300);
+}, []);
 
   const searchGames = useCallback(async (e) => {
     e.preventDefault();
@@ -126,7 +138,6 @@ const useHomePage = () => {
     }
   }, [fetchRandomGames]);
 
-  // Derived state
   const displayGames = isSearching ? searchResults : games;
 
   return {

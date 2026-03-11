@@ -2,17 +2,15 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  padding: 1rem 0 3rem;
+  padding: 1rem 5% 3rem;
   width: 100%;
   min-height: 600px;
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.2s ease;
+  box-sizing: border-box;
 }
 
 .game-card-wrapper {
   height: 100%;
-  min-height: 280px;
+  min-height: 320px; /* Increased from 280px to accommodate more content */
   width: 100%;
 }
 
@@ -36,63 +34,85 @@
   border-color: rgba(255, 255, 255, 0.4);
 }
 
-.clickable-game-card .game-card {
-  background: transparent  ;
-  border: none  ;
-  padding: 1.5rem ;
-  height: 100% ;
-  width: 100% ;
-  display: flex ;
-  flex-direction: column ;
+.clickable-game-card :global(.game-card) {
+  background: transparent;
+  border: none;
+  padding: 1.5rem;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.clickable-game-card .game-card img {
-  height: 200px ;
-  width: 100% ;
-  object-fit: cover ;
-  border-radius: 10px ;
-  margin-bottom: 1rem ;
+.clickable-game-card :global(.game-card img) {
+  height: 180px; /* Slightly reduced to make room for more text */
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
 }
 
-.clickable-game-card .game-card h3 {
-  font-size: 1.25rem ;
-  margin-bottom: 0.75rem ;
-  color: white ;
-  overflow: hidden ;
-  text-overflow: ellipsis ;
-  display: -webkit-box ;
-  -webkit-line-clamp: 2 ;
-  -webkit-box-orient: vertical ;
+.clickable-game-card :global(.game-card h3) {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem 0; /* Adjusted margin */
+  color: white;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Changed to 1 line for title */
+  -webkit-box-orient: vertical;
 }
 
-.clickable-game-card .game-card p {
-  font-size: 0.95rem ;
-  color: rgba(255, 255, 255, 0.9) ;
-  margin-bottom: 0.5rem ;
-  flex-grow: 1 ;
-  overflow: hidden ;
-  text-overflow: ellipsis ;
-  display: -webkit-box ;
-  -webkit-line-clamp: 3 ;
-  -webkit-box-orient: vertical ;
+.clickable-game-card :global(.game-card .release-date) {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 0.5rem 0;
+  display: block;
+}
+
+.clickable-game-card :global(.game-card .rating) {
+  font-size: 1rem;
+  color: #ffd700; /* Gold color for rating */
+  margin: 0 0 0.5rem 0;
+  display: block;
+  font-weight: 500;
+}
+
+.clickable-game-card :global(.game-card .genres) {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Allow up to 2 lines for genres */
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+
+/* Remove the old p selector that was hiding content */
+.clickable-game-card :global(.game-card p) {
+  display: none; /* Hide old paragraph styling */
 }
 
 .placeholder-card {
-  background: rgba(255, 255, 255, 0.05) ;
+  background: rgba(255, 255, 255, 0.05);
   animation: pulse 1.5s ease-in-out infinite;
-  cursor: default ;
-  display: flex ;
+  cursor: default;
+  display: flex;
 }
 
 .placeholder-card:hover {
-  transform: none ;
-  box-shadow: none ;
-  border-color: rgba(255, 255, 255, 0.2) ;
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .placeholder-image {
   width: 100%;
-  height: 200px;
+  height: 180px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   margin-bottom: 1rem;
@@ -103,12 +123,28 @@
   height: 24px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
-.placeholder-text {
-  width: 100%;
-  height: 60px;
+.placeholder-release {
+  width: 60%;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-rating {
+  width: 40%;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-genres {
+  width: 90%;
+  height: 40px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
@@ -142,6 +178,7 @@
   border-radius: 15px;
   color: white;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .loading-spinner {
@@ -177,6 +214,7 @@
   color: white;
   text-align: center;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .error-message p {
@@ -212,23 +250,24 @@
   .games-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    padding: 1rem 4% 2rem;
     min-height: 500px;
   }
   
-  .clickable-game-card .game-card img {
-    height: 180px ;
+  .game-card-wrapper {
+    min-height: 300px;
+  }
+  
+  .clickable-game-card :global(.game-card img) {
+    height: 160px;
   }
   
   .placeholder-image {
-    height: 180px;
+    height: 160px;
   }
   
   .placeholder-title {
     height: 22px;
-  }
-  
-  .placeholder-text {
-    height: 54px;
   }
   
   .loading-container,
@@ -240,19 +279,24 @@
 @media (max-width: 480px) {
   .games-grid {
     gap: 1.25rem;
+    padding: 1rem 3% 2rem;
     min-height: 400px;
   }
   
-  .clickable-game-card .game-card {
-    padding: 1.25rem ;
+  .game-card-wrapper {
+    min-height: 280px;
   }
   
-  .clickable-game-card .game-card img {
-    height: 160px ;
+  .clickable-game-card :global(.game-card) {
+    padding: 1.25rem;
+  }
+  
+  .clickable-game-card :global(.game-card img) {
+    height: 140px;
   }
   
   .placeholder-image {
-    height: 160px;
+    height: 140px;
   }
   
   .placeholder-title {
@@ -260,12 +304,8 @@
     margin-bottom: 0.5rem;
   }
   
-  .placeholder-text {
-    height: 48px;
-  }
-  
-  .clickable-game-card .game-card h3 {
-    font-size: 1.1rem ;
+  .clickable-game-card :global(.game-card h3) {
+    font-size: 1.1rem;
   }
   
   .loading-container,

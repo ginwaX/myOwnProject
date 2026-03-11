@@ -1,6 +1,6 @@
 import React from 'react';
 import GameCard from '../../shared/GameCard/GameCard';
-import './GameGrid.css';
+import styles from './GameGrid.module.css';
 
 const GameGrid = ({ 
   games, 
@@ -11,8 +11,8 @@ const GameGrid = ({
 }) => {
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
+      <div className={styles['loading-container']}>
+        <div className={styles['loading-spinner']}></div>
         <p>{isSearching ? 'Searching games...' : 'Loading exciting games for you...'}</p>
       </div>
     );
@@ -20,7 +20,7 @@ const GameGrid = ({
 
   if (!loading && games.length === 0) {
     return (
-      <div className="error-message">
+      <div className={styles['error-message']}>
         <p>No games found. Please try again.</p>
         <button onClick={onRefresh}>Get Random Games</button>
       </div>
@@ -28,11 +28,11 @@ const GameGrid = ({
   }
 
   return (
-    <div className="games-grid">
+    <div className={styles['games-grid']}>
       {games.map(game => (
-        <div key={game.id} className="game-card-wrapper">
+        <div key={game.id} className={styles['game-card-wrapper']}>
           <div 
-            className="clickable-game-card"
+            className={styles['clickable-game-card']}
             onClick={() => onGameClick(game.id)}
           >
             <GameCard game={game} />

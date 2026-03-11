@@ -10,7 +10,7 @@ const useGameDetails = () => {
   const [photoIndex, setPhotoIndex] = useState(0);
 
   const hasMountedRef = useRef(false);
-  const API_KEY = '';
+  const API_KEY = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
     if (!hasMountedRef.current) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../../shared/Header/Header';
-import './HomePage.css';
+import styles from './HomePage.module.css'; // Updated import
 import useHomePage from '../../shared/hooks/HomePageHooks';
 import GameGrid from '../../entities/GameGrid/GameGrid';
 
@@ -26,8 +26,8 @@ const HomePage = () => {
   };
 
   return (
-    <div className="home-page">
-      <div className="position-relative">
+    <div className={styles['home-page']}>
+      <div className={styles['position-relative']}>
         <Header
           searchQuery={searchQuery}
           setSearchQuery={handleSearchQueryChange}
@@ -42,8 +42,8 @@ const HomePage = () => {
         />
       </div>
 
-      <main className="main-content">
-        <div className="content-wrapper">
+      <main className={styles['main-content']}>
+        <div className={styles['content-wrapper']}>
           <GameGrid
             games={displayGames}
             loading={loading}
